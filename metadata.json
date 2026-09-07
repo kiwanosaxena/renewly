@@ -1,0 +1,7 @@
+{
+  "name": "Renewly",
+  "description": "Subscription tracker that alerts users before recurring charges to help manage expenses effectively.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
