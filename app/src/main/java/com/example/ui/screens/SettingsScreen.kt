@@ -112,7 +112,7 @@ fun SettingsScreen(
                 modifier = Modifier.padding(bottom = RenewlyTokens.LabelFieldGap)
               )
               RenewlySegmentedControl(
-                options = listOf("$", "€", "£", "¥"),
+                options = listOf("$", "€", "£", "₹", "¥"),
                 selectedOption = settings.currency,
                 onOptionSelected = { onUpdateSettings(settings.copy(currency = it)) }
               )

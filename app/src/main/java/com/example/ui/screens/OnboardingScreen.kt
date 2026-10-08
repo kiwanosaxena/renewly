@@ -136,6 +136,7 @@ fun OnboardingScreen(
                 Pair("$", "USD / CAD / AUD"),
                 Pair("€", "EUR"),
                 Pair("£", "GBP"),
+                Pair("₹", "INR"),
                 Pair("¥", "JPY")
               )
 
