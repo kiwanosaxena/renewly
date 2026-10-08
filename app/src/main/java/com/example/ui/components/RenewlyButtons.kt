@@ -61,7 +61,16 @@ fun RenewlyPrimaryButton(
     modifier = modifier
       .fillMaxWidth()
       .height(height)
-      .then(if (enabled) Modifier.shadow(8.dp, RoundedCornerShape(RenewlyTokens.RadiusPill), ambientColor = Color.Black.copy(alpha = 0.15f)) else Modifier)
+      .then(
+        if (enabled) {
+          Modifier.shadow(
+            elevation = 3.dp,
+            shape = RoundedCornerShape(RenewlyTokens.RadiusPill),
+            ambientColor = Color.Black.copy(alpha = 0.06f),
+            spotColor = Color.Black.copy(alpha = 0.06f)
+          )
+        } else Modifier
+      )
       .clip(RoundedCornerShape(RenewlyTokens.RadiusPill))
       .background(bgColor)
       .clickable(

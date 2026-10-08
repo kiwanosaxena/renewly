@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -63,6 +64,8 @@ fun CancelBottomSheet(
   val monD = nextCharge.format(DateTimeFormatter.ofPattern("MMM d", Locale.US))
   val resumeMonth = LocalDate.now().plusMonths(3).format(DateTimeFormatter.ofPattern("MMMM", Locale.US))
   val annualAmount = RenewlyCalculations.formatCurrency(RenewlyCalculations.normalizedMonthly(subscription) * 12, currency)
+
+  BackHandler { onDismiss() }
 
   ModalBottomSheet(
     onDismissRequest = onDismiss,

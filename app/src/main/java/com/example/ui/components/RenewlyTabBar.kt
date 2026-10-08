@@ -55,9 +55,18 @@ fun RenewlyTabBar(
     Row(
       modifier = Modifier
         .fillMaxWidth()
-        .shadow(8.dp, outerShape, ambientColor = Color.Black.copy(alpha = 0.10f))
+        .then(
+          if (!colors.isDark) {
+            Modifier.shadow(
+              elevation = 4.dp,
+              shape = outerShape,
+              ambientColor = Color.Black.copy(alpha = 0.06f),
+              spotColor = Color.Black.copy(alpha = 0.06f)
+            )
+          } else Modifier
+        )
         .clip(outerShape)
-        .background(colors.card)
+        .background(colors.sheet)
         .border(1.dp, colors.line, outerShape)
         .padding(6.dp),
       horizontalArrangement = Arrangement.spacedBy(4.dp),

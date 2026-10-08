@@ -31,7 +31,16 @@ fun RenewlyStandardCard(
   Box(
     modifier = modifier
       .fillMaxWidth()
-      .shadow(4.dp, shape, ambientColor = Color.Black.copy(alpha = 0.05f))
+      .then(
+        if (!colors.isDark) {
+          Modifier.shadow(
+            elevation = 2.dp,
+            shape = shape,
+            ambientColor = Color.Black.copy(alpha = 0.06f),
+            spotColor = Color.Black.copy(alpha = 0.06f)
+          )
+        } else Modifier
+      )
       .clip(shape)
       .background(colors.card)
       .border(1.dp, colors.line, shape)
@@ -53,7 +62,16 @@ fun RenewlyHeroCard(
   Box(
     modifier = modifier
       .fillMaxWidth()
-      .shadow(6.dp, shape, ambientColor = Color.Black.copy(alpha = 0.07f))
+      .then(
+        if (!colors.isDark) {
+          Modifier.shadow(
+            elevation = 3.dp,
+            shape = shape,
+            ambientColor = Color.Black.copy(alpha = 0.06f),
+            spotColor = Color.Black.copy(alpha = 0.06f)
+          )
+        } else Modifier
+      )
       .clip(shape)
       .background(colors.card)
       .border(1.dp, colors.line, shape)

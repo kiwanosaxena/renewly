@@ -1,8 +1,10 @@
 package com.example
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -14,11 +16,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.ui.RenewlyScreen
 import com.example.ui.RenewlyViewModel
+import com.example.ui.components.RenewlyTab
 import com.example.ui.components.RenewlyTabBar
 import com.example.ui.components.RenewlyToast
 import com.example.ui.screens.AddSubscriptionScreen
@@ -72,10 +80,49 @@ fun RenewlyMainContent(viewModel: RenewlyViewModel) {
   val settings by viewModel.settings.collectAsState()
   val toastMessage by viewModel.toastMessage.collectAsState()
 
+  val context = LocalContext.current
+  var lastBackPressTime by remember { mutableLongStateOf(0L) }
+  var onboardingStep by remember { mutableIntStateOf(1) }
+
+  BackHandler {
+    when {
+      currentScreen == RenewlyScreen.Onboarding -> {
+        if (onboardingStep > 1) {
+          onboardingStep = 1
+          lastBackPressTime = 0L
+        } else {
+          val now = System.currentTimeMillis()
+          if (now - lastBackPressTime < 2000L) {
+            (context as Activity).finish()
+          } else {
+            lastBackPressTime = now
+            viewModel.showToast("Press back again to exit")
+          }
+        }
+      }
+      currentScreen == RenewlyScreen.Main && selectedTab == RenewlyTab.Home -> {
+        val now = System.currentTimeMillis()
+        if (now - lastBackPressTime < 2000L) {
+          (context as Activity).finish()
+        } else {
+          lastBackPressTime = now
+          viewModel.showToast("Press back again to exit")
+        }
+      }
+      else -> {
+        lastBackPressTime = 0L
+        viewModel.navigateTo(RenewlyScreen.Main)
+        viewModel.selectTab(RenewlyTab.Home)
+      }
+    }
+  }
+
   Box(modifier = Modifier.fillMaxSize()) {
     when (val screen = currentScreen) {
       RenewlyScreen.Onboarding -> {
         OnboardingScreen(
+          step = onboardingStep,
+          onStepChange = { onboardingStep = it },
           onComplete = { currency ->
             viewModel.completeOnboarding(currency)
           }

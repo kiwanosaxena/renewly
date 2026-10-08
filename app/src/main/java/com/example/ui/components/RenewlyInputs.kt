@@ -272,7 +272,16 @@ fun <T> RenewlySegmentedControl(
         modifier = Modifier
           .weight(1f)
           .height(containerHeight - 8.dp)
-          .then(if (isSelected && isAddModeStyle) Modifier.shadow(2.dp, itemShape) else Modifier)
+          .then(
+            if (isSelected && isAddModeStyle && !colors.isDark) {
+              Modifier.shadow(
+                elevation = 1.dp,
+                shape = itemShape,
+                ambientColor = Color.Black.copy(alpha = 0.06f),
+                spotColor = Color.Black.copy(alpha = 0.06f)
+              )
+            } else Modifier
+          )
           .clip(itemShape)
           .background(bgColor)
           .clickable(role = Role.RadioButton) { onOptionSelected(option) },

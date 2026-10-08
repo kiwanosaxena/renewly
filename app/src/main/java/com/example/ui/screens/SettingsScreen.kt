@@ -1,8 +1,13 @@
 package com.example.ui.screens
 
+import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import com.example.BuildConfig
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import com.example.data.model.UserSettings
 import com.example.ui.components.RenewlyBackHeader
 import com.example.ui.components.RenewlyIcon
+import com.example.ui.components.RenewlyInlineLink
 import com.example.ui.components.RenewlyNestedCard
 import com.example.ui.components.RenewlyScreenScaffold
 import com.example.ui.components.RenewlySecondaryCardButton
@@ -297,13 +303,33 @@ fun SettingsScreen(
         RenewlyNestedCard {
           Column {
             Text(
-              text = "Renewly 1.0.0",
+              text = "Renewly " + BuildConfig.VERSION_NAME,
               style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.W600, color = colors.ink)
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+              text = "by Avikalabs",
+              style = TextStyle(fontSize = 12.5.sp, color = colors.ink3)
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
               text = "Zero tracking. Zero bank connections. All data on-device.",
               style = TextStyle(fontSize = 12.5.sp, color = colors.ink2)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            RenewlyInlineLink(
+              text = "Privacy policy",
+              onClick = {
+                try {
+                  val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://github.com/kiwanosaxena/renewly/blob/main/privacy.md")
+                  )
+                  context.startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                  showToast("No browser found.")
+                }
+              }
             )
           }
         }
@@ -312,6 +338,7 @@ fun SettingsScreen(
 
     // Delete confirmation dialog
     if (showDeleteConfirmDialog) {
+      BackHandler { showDeleteConfirmDialog = false }
       AlertDialog(
         onDismissRequest = { showDeleteConfirmDialog = false },
         title = { Text("Delete all data?", color = colors.ink) },
@@ -337,12 +364,13 @@ fun SettingsScreen(
             Text("Cancel", color = colors.ink2)
           }
         },
-        containerColor = colors.card
+        containerColor = colors.sheet
       )
     }
 
     // Import JSON dialog
     if (showImportDialog) {
+      BackHandler { showImportDialog = false }
       AlertDialog(
         onDismissRequest = { showImportDialog = false },
         title = { Text("Import JSON", color = colors.ink) },
@@ -378,7 +406,7 @@ fun SettingsScreen(
             Text("Cancel", color = colors.ink2)
           }
         },
-        containerColor = colors.card
+        containerColor = colors.sheet
       )
     }
   }

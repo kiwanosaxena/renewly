@@ -50,19 +50,20 @@ import com.example.ui.theme.RenewlyTokens
 @Composable
 fun OnboardingScreen(
   onComplete: (currency: String) -> Unit,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  step: Int = 1,
+  onStepChange: (Int) -> Unit = {}
 ) {
   val colors = RenewlyTheme.colors
   val typography = RenewlyTheme.typography
 
-  var step by remember { mutableIntStateOf(1) }
   var selectedCurrency by remember { mutableStateOf("$") }
 
   // Permission launcher for Android 13+
   val permissionLauncher = rememberLauncherForActivityResult(
     contract = ActivityResultContracts.RequestPermission()
   ) { isGranted ->
-    step = 2
+    onStepChange(2)
   }
 
   RenewlyScreenScaffold(modifier = modifier) {
@@ -248,7 +249,7 @@ fun OnboardingScreen(
               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
               } else {
-                step = 2
+                onStepChange(2)
               }
             }
           )
